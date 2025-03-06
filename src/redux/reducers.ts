@@ -27,7 +27,22 @@ export const skusReducer = (state = initialSkusState, action: any) => {
   }
 };
 
+const initialPlanningState: any[] = [];
+
+
+export const planningReducer = (state = initialPlanningState, action: any) => {
+  switch (action.type) {
+    case 'ADD_PLANNING':
+      return [...state, action.payload];
+    case 'REMOVE_PLANNING':
+      return state.filter((_, index) => index !== action.payload);
+    default:
+      return state;
+  }
+};
+
 export const rootReducer = combineReducers({
   stores: storesReducer,
   skus: skusReducer,
+  planning: planningReducer,
 });
