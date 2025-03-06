@@ -51,14 +51,14 @@ const Sidebar = () => {
         </aside>
 
         {/* Main Content */}
-        <div className="flex-1 p-8">
+        {/* <div className="flex-1 p-8">
           <header className="text-center py-8">
             <h1 className="text-3xl font-bold">Data Viewer App</h1>
           </header>
           <main className="w-full max-w-md bg-white p-6 rounded-lg shadow-md mx-auto">
             <p>Select a page from the navigation menu.</p>
           </main>
-        </div>
+        </div> */}
       </div>
   )
 }
