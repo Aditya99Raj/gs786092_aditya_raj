@@ -2,15 +2,10 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../redux";
 import { addStore, removeStore } from "../redux/actions";
-import {
-  useReactTable,
-  getCoreRowModel,
-  getPaginationRowModel,
-  flexRender,
-} from "@tanstack/react-table";
-import { JSX } from "react/jsx-runtime";
+import {useReactTable, getCoreRowModel, getPaginationRowModel, flexRender,} from "@tanstack/react-table";
 import axios from "axios";
 import Pagination from "../components/Pagination";
+import ReactTable from "../components/ReactTable";
 
 type Store = {
   ID: string;
@@ -39,8 +34,8 @@ const Stores: React.FC = () => {
     fetchStores();
   }, [dispatch]);
 
-  const columns = useMemo(() => 
-  [
+  const columns = useMemo(
+    () => [
       { accessorKey: "ID", header: "ID" },
       { accessorKey: "Label", header: "Label" },
       { accessorKey: "City", header: "City" },
@@ -60,7 +55,7 @@ const Stores: React.FC = () => {
     [dispatch]
   );
 
-   const table = useReactTable({
+  const table = useReactTable({
     data: stores,
     columns,
     getCoreRowModel: getCoreRowModel(),
@@ -85,9 +80,7 @@ const Stores: React.FC = () => {
 
   return (
     <div className="p-8 w-full flex flex-col items-center">
-      <h1 className=" text-3xl font-bold mb-4">
-        Manage Stores
-      </h1>
+      <h1 className=" text-3xl font-bold mb-4">Manage Stores</h1>
       <div className="mb-4">
         <input
           type="text"
@@ -103,34 +96,7 @@ const Stores: React.FC = () => {
           Add Store
         </button>
       </div>
-
-      <table className="w-full table-auto border-collapse border border-gray-300">
-        <thead className="bg-gray-100">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th key={header.id} className="border border-gray-300 p-4">
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} className="hover:bg-gray-50 p-2">
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="border border-gray-300 p-2">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <ReactTable table={table} />
       <Pagination table={table} />
     </div>
   );
