@@ -1,67 +1,130 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../redux';
+import axios from 'axios';
 import { addSku, removeSku } from '../redux/actions';
+import { RootState } from '../redux';
+import { flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
+import Pagination from '../components/Pagination';
 
-interface Sku {
-  name: string;
-  price: number;
-  cost: number;
+interface SKUData {
+  ID: string;
+  Label: string;
+  Class: string;
+  Department: string;
+  Price: string;
+  Cost: string;
 }
 
-const SkusPage: React.FC = () => {
+
+const SKU: React.FC = () => {
   const skus = useSelector((state: RootState) => state.skus);
   const dispatch = useDispatch();
-  const [newSku, setNewSku] = useState<Sku>({ name: '', price: 0, cost: 0 });
+  const [newSKU, setNewSKU] = useState('');
 
-  const handleAddSku = () => {
-    if (newSku.name.trim()) {
-      dispatch(addSku(newSku));
-      setNewSku({ name: '', price: 0, cost: 0 });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('/db.json');
+        const data: SKUData[] = response.data.skus || [];
+        console.log(data)
+        data.forEach((skus) => dispatch(addSku(skus)));
+      } catch (error) {
+        console.error('Error fetching SKU data:', error);
+      }
+    };
+    fetchData();
+  }, [dispatch]);
+
+  const columns = useMemo(() => 
+  [
+      { accessorKey: "ID", header: "ID" },
+      { accessorKey: "Label", header: "Label" },
+      { accessorKey: "Class", header: "Class" },
+      { accessorKey: "Department", header: "Department" },
+      { accessorKey: "Price", header: "Price" },
+      { accessorKey: "Cost", header: "Cost" },
+      {
+        header: "Actions",
+        cell: ({ row }: any) => (
+          <button
+            onClick={() => dispatch(removeSku(row.index))}
+            className="text-red-600"
+          >
+            Remove
+          </button>
+        ),
+      },
+    ],
+    [dispatch]
+  );
+
+  const table = useReactTable({
+    data: skus,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    initialState: {
+      pagination: {
+        pageSize: 8,
+      },
+    },
+  });
+
+  const handleaddSku = () => {
+    if (newSKU.trim()) {
+      dispatch(addSku({ SKU: newSKU, Description: 'New SKU', Category: 'General', Price: '$0.00' }));
+      setNewSKU('');
     }
   };
 
-  const handleRemoveSku = (index: number) => {
+  const handleremoveSku = (index: number) => {
     dispatch(removeSku(index));
   };
+console.log()
 
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-4">Manage SKUs</h1>
-      <div className="mb-4 space-y-2">
+    <div className="p-8 w-full flex flex-col items-center">
+      <h1 className="text-3xl font-bold mb-4">SKU Management</h1>
+      <div className="mb-4 flex space-x-2">
         <input
           type="text"
-          value={newSku.name}
-          onChange={(e) => setNewSku({ ...newSku, name: e.target.value })}
+          value={newSKU}
+          onChange={(e) => setNewSKU(e.target.value)}
           placeholder="Enter SKU name"
-          className="p-2 border rounded w-full"
+          className="p-2 border rounded"
         />
-        <input
-          type="number"
-          value={newSku.price}
-          onChange={(e) => setNewSku({ ...newSku, price: parseFloat(e.target.value) })}
-          placeholder="Enter Price"
-          className="p-2 border rounded w-full"
-        />
-        <input
-          type="number"
-          value={newSku.cost}
-          onChange={(e) => setNewSku({ ...newSku, cost: parseFloat(e.target.value) })}
-          placeholder="Enter Cost"
-          className="p-2 border rounded w-full"
-        />
-        <button onClick={handleAddSku} className="bg-blue-600 text-white p-2 rounded w-full">Add SKU</button>
+        <button onClick={handleaddSku} className="bg-blue-600 text-white p-2 rounded">Add SKU</button>
       </div>
-      <ul className="space-y-2">
-        {skus.map((sku: Sku, index: number) => (
-          <li key={index} className="flex justify-between items-center p-2 border rounded">
-            <span>{sku.name} - Price: ${sku.price} - Cost: ${sku.cost}</span>
-            <button onClick={() => handleRemoveSku(index)} className="text-red-600">Remove</button>
-          </li>
-        ))}
-      </ul>
+      <table className="w-full table-auto border-collapse border border-gray-300">
+        <thead className="bg-gray-100">
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th key={header.id} className="border border-gray-300 p-4">
+                  {flexRender(
+                    header.column.columnDef.header,
+                    header.getContext()
+                  )}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.id} className="hover:bg-gray-50 p-2">
+              {row.getVisibleCells().map((cell) => (
+                <td key={cell.id} className="border border-gray-300 p-2">
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <Pagination table={table} />
     </div>
   );
 };
 
-export default SkusPage;
+export default SKU;

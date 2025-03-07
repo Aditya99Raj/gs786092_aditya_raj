@@ -16,7 +16,7 @@ const Sidebar = () => {
                   className="flex items-center space-x-2 hover:bg-blue-500 p-2 rounded"
                 >
                   <>{/* <FaStore size={20} /> */}</>
-                  <span>Manage Stores</span>
+                  <span>Stores</span>
                 </Link>
               </li>
               <li>
@@ -25,7 +25,7 @@ const Sidebar = () => {
                   className="flex items-center space-x-2 hover:bg-blue-500 p-2 rounded"
                 >
                   {/* <FaBoxes /> */}
-                  <span>Manage SKUs</span>
+                  <span>SKUs</span>
                 </Link>
               </li>
               <li>
@@ -43,22 +43,12 @@ const Sidebar = () => {
                   className="flex items-center space-x-2 hover:bg-blue-500 p-2 rounded"
                 >
                   {/* <FaChartLine /> */}
-                  <span>View Charts</span>
+                  <span>Charts</span>
                 </Link>
               </li>
             </ul>
           </nav>
         </aside>
-
-        {/* Main Content */}
-        {/* <div className="flex-1 p-8">
-          <header className="text-center py-8">
-            <h1 className="text-3xl font-bold">Data Viewer App</h1>
-          </header>
-          <main className="w-full max-w-md bg-white p-6 rounded-lg shadow-md mx-auto">
-            <p>Select a page from the navigation menu.</p>
-          </main>
-        </div> */}
       </div>
   )
 }

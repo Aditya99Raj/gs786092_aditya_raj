@@ -1,9 +1,10 @@
-// redux/reducers.ts
 import { combineReducers } from 'redux';
-import { ADD_STORE, REMOVE_STORE, ADD_SKU, REMOVE_SKU } from './actionTypes';
+import { ADD_STORE, REMOVE_STORE, ADD_SKU, REMOVE_SKU, ADD_PLANNING, REMOVE_PLANNING } from './actionTypes';
 
 const initialStoresState: string[] = [];
 const initialSkusState: { name: string; price: number; cost: number }[] = [];
+const initialPlanningState: any[] = [];
+
 
 export const storesReducer = (state = initialStoresState, action: any) => {
   switch (action.type) {
@@ -27,14 +28,12 @@ export const skusReducer = (state = initialSkusState, action: any) => {
   }
 };
 
-const initialPlanningState: any[] = [];
-
 
 export const planningReducer = (state = initialPlanningState, action: any) => {
   switch (action.type) {
-    case 'ADD_PLANNING':
+    case ADD_PLANNING:
       return [...state, action.payload];
-    case 'REMOVE_PLANNING':
+    case REMOVE_PLANNING:
       return state.filter((_, index) => index !== action.payload);
     default:
       return state;

@@ -9,6 +9,8 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 import { JSX } from "react/jsx-runtime";
+import axios from "axios";
+import Pagination from "../components/Pagination";
 
 type Store = {
   ID: string;
@@ -23,15 +25,22 @@ const Stores: React.FC = () => {
   const [newStore, setNewStore] = useState("");
 
   useEffect(() => {
-    fetch("/db.json")
-      .then((res) => res.json())
-      .then((data) => {
-        data.stores.forEach((store: string) => dispatch(addStore(store)));
-      });
+    const fetchStores = async () => {
+      try {
+        const response = await axios.get("/db.json");
+        response.data.stores.forEach((store: string) => {
+          dispatch(addStore(store));
+        });
+      } catch (error) {
+        console.error("Error fetching stores:", error);
+      }
+    };
+
+    fetchStores();
   }, [dispatch]);
 
-  const columns = useMemo(
-    () => [
+  const columns = useMemo(() => 
+  [
       { accessorKey: "ID", header: "ID" },
       { accessorKey: "Label", header: "Label" },
       { accessorKey: "City", header: "City" },
@@ -51,14 +60,14 @@ const Stores: React.FC = () => {
     [dispatch]
   );
 
-  const table = useReactTable({
+   const table = useReactTable({
     data: stores,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       pagination: {
-        pageSize: 5,
+        pageSize: 8,
       },
     },
   });
@@ -75,8 +84,10 @@ const Stores: React.FC = () => {
   };
 
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-4">Manage Stores</h1>
+    <div className="p-8 w-full flex flex-col items-center">
+      <h1 className=" text-3xl font-bold mb-4">
+        Manage Stores
+      </h1>
       <div className="mb-4">
         <input
           type="text"
@@ -98,7 +109,7 @@ const Stores: React.FC = () => {
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <th key={header.id} className="border border-gray-300 p-2">
+                <th key={header.id} className="border border-gray-300 p-4">
                   {flexRender(
                     header.column.columnDef.header,
                     header.getContext()
@@ -110,7 +121,7 @@ const Stores: React.FC = () => {
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} className="hover:bg-gray-50">
+            <tr key={row.id} className="hover:bg-gray-50 p-2">
               {row.getVisibleCells().map((cell) => (
                 <td key={cell.id} className="border border-gray-300 p-2">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -120,27 +131,7 @@ const Stores: React.FC = () => {
           ))}
         </tbody>
       </table>
-
-      <div className="flex justify-between mt-4">
-        <button
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-          className="bg-blue-600 text-white p-2 rounded"
-        >
-          Previous
-        </button>
-        <span>
-          Page <strong>{table.getState().pagination.pageIndex + 1}</strong> of{" "}
-          {table.getPageCount()}
-        </span>
-        <button
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-          className="bg-blue-600 text-white p-2 rounded"
-        >
-          Next
-        </button>
-      </div>
+      <Pagination table={table} />
     </div>
   );
 };
