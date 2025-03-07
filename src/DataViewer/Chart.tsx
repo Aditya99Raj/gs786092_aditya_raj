@@ -62,7 +62,7 @@ const Chart: React.FC = () => {
 
   return (
     <div className="p-8 w-full flex flex-col  items-center">
-      <h1 className="flex items-center text-3xl font-bold mb-4">Charts</h1>
+      {/* <h1 className="flex items-center text-3xl font-bold mb-4">Charts</h1> */}
       <div className="w-3/4">
         <Line data={chartData} />
       </div>

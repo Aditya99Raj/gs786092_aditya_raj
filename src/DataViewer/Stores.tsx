@@ -80,7 +80,7 @@ const Stores: React.FC = () => {
 
   return (
     <div className="p-8 w-full flex flex-col items-center">
-      <h1 className=" text-3xl font-bold mb-4">Manage Stores</h1>
+      {/* <h1 className=" text-3xl font-bold mb-4">Manage Stores</h1> */}
       <div className="mb-4">
         <input
           type="text"
