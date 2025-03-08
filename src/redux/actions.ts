@@ -1,13 +1,13 @@
 import { ADD_STORE, REMOVE_STORE, ADD_SKU, REMOVE_SKU, ADD_PLANNING } from './actionTypes';
 
-export const addStore = (storeName: string) => ({
+export const addStore = (storeName: {}) => ({
   type: ADD_STORE,
   payload: storeName,
 });
 
-export const removeStore = (index: number) => ({
+export const removeStore = (id: string) => ({
   type: REMOVE_STORE,
-  payload: index,
+  payload: id,
 });
 
 export const addSku = (sku: {}) => ({

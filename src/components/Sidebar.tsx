@@ -5,8 +5,9 @@ import { IconType } from "react-icons";
 
 const Sidebar = () => {
   return (
-    <div className="min-h-screen bg-gray-100 flex">
+    <div className="min-h-screen bg-gray-100 flex pt-20">
         {/* Left Navigation Menu */}
+        {/*  */}
         <aside className="w-40 bg-blue-600 text-white flex flex-col p-4 space-y-4">
           <nav>
             <ul className="space-y-4">

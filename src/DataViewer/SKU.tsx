@@ -81,11 +81,9 @@ const SKU: React.FC = () => {
   const handleremoveSku = (index: number) => {
     dispatch(removeSku(index));
   };
-console.log()
 
   return (
     <div className="p-8 w-full flex flex-col items-center">
-      <h1 className="text-3xl font-bold mb-4">SKU Management</h1>
       <div className="mb-4 flex space-x-2">
         <input
           type="text"

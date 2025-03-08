@@ -8,22 +8,28 @@ import Chart from "./Chart";
 import Planning from "./Planning";
 import SKU from "./SKU";
 import Stores from "./Stores";
-
-const Icon: IconType = FaStore;
+import Auth from "../components/Auth";
+import { useAuth } from "../components/AuthContext";
 
 const HomePage: React.FC = () => {
+  const { user } = useAuth();
+
+  if (!user) {
+    return <Auth />;
+  }
   return (
     <>
       <Navbar />
       <div className="flex">
         <Sidebar />
-        <div className="flex justify-center w-full min-h-screen">
+        <div className="flex justify-center w-full min-h-screen pt-20">
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="*" element={<HomePage />} />
             <Route path="/stores" element={<Stores />} />
             <Route path="/skus" element={<SKU />} />
             <Route path="/planning" element={<Planning />} />
             <Route path="/charts" element={<Chart />} />
+            <Route path='/auth' element={<Auth />} />
           </Routes>
         </div>
       </div>
