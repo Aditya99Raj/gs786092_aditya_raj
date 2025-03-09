@@ -10,6 +10,7 @@ import SKU from "./SKU";
 import Stores from "./Stores";
 import Auth from "../components/Auth";
 import { useAuth } from "../components/AuthContext";
+import ProtectedRoute from "../components/ProtectedRoutes";
 
 const HomePage: React.FC = () => {
   const { user } = useAuth();
@@ -25,9 +26,9 @@ const HomePage: React.FC = () => {
         <div className="flex justify-center w-full min-h-screen pt-20">
           <Routes>
             {/* <Route path="/" element={<HomePage />} /> */}
-            <Route path="/stores" element={<Stores />} />
-            <Route path="/skus" element={<SKU />} />
-            <Route path="/planning" element={<Planning />} />
+            <Route path="/stores" element={<ProtectedRoute><Stores /></ProtectedRoute>} />
+            <Route path="/skus" element={<ProtectedRoute><SKU /></ProtectedRoute>} />
+            <Route path="/planning" element={<ProtectedRoute><Planning /></ProtectedRoute>} />
             <Route path="/charts" element={<Chart />} />
             <Route path='/auth' element={<Auth />} />
           </Routes>

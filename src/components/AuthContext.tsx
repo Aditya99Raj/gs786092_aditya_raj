@@ -2,7 +2,8 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 type AuthContextType = {
   user: string | null;
-  login: (username: string) => void;
+  login: (username: string, password: string) => boolean;
+  signup: (username: string, password: string) => boolean;
   logout: () => void;
 };
 
@@ -13,9 +14,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.getItem('user')
   );
 
-  const login = (username: string) => {
-    localStorage.setItem('user', username);
+  const signup = (username: string, password: string) => {
+    if (localStorage.getItem('user')) {
+      return false; // User already exists
+    }
+    const userData = { username, password };
+    localStorage.setItem('user', JSON.stringify(userData));
     setUser(username);
+    return true;
+  };
+
+  const login = (username: string, password: string) => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      const { username: storedUsername, password: storedPassword } = JSON.parse(storedUser);
+      if (storedUsername === username && storedPassword === password) {
+        setUser(username);
+        return true;
+      }
+    }
+    return false;
   };
 
   const logout = () => {
@@ -24,7 +42,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );
