@@ -27,7 +27,6 @@ const SKU: React.FC = () => {
       try {
         const response = await axios.get('/db.json');
         const data: SKUData[] = response.data.skus || [];
-        console.log(data)
         data.forEach((skus) => dispatch(addSku(skus)));
       } catch (error) {
         console.error('Error fetching SKU data:', error);
