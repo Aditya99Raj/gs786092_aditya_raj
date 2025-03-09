@@ -26,7 +26,7 @@ const HomePage: React.FC = () => {
         <div className="flex justify-center w-full min-h-screen pt-20">
           <Routes>
             {/* <Route path="/" element={<HomePage />} /> */}
-            <Route path="/stores" element={<ProtectedRoute><Stores /></ProtectedRoute>} />
+            <Route path="/" element={<ProtectedRoute><Stores /></ProtectedRoute>} />
             <Route path="/skus" element={<ProtectedRoute><SKU /></ProtectedRoute>} />
             <Route path="/planning" element={<ProtectedRoute><Planning /></ProtectedRoute>} />
             <Route path="/charts" element={<Chart />} />

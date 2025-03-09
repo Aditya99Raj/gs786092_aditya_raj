@@ -15,7 +15,7 @@ const Auth = () => {
     if (username && password) {
       const success = isSignUp ? signup(username, password) : login(username, password);
       if (success) {
-        navigate('/stores');
+        navigate('/');
       } else {
         setError(isSignUp ? 'User already exists' : 'Invalid credentials');
       }
